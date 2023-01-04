@@ -45,6 +45,7 @@ int main() {
 
     while (bet > 0) {
         std::cout << "Your bet is: $" << bet << "\n";
+        bal -= bet;
 
         // Begin game (draw cards)
 
@@ -62,7 +63,7 @@ int main() {
         int choice;
         std::cout << "0 for stand, 1 for hit: ";
         std::cin >> choice;
-        
+
         // until player stands, keep drawing cards
         while ( choice == 1 ) {
             choice = 0;
@@ -76,6 +77,28 @@ int main() {
             }
         }
 
+        // evaluate win / lose
+        if ( player.value <= 21 ) {
+            while ( dealer.value < 17) {
+                drawCard(&dealer);
+            }
+            std::cout << "Dealers value: " << dealer.value << "\n";
+            if ( dealer.value <= 21 ) {
+                if ( player.value > dealer.value ) {
+                    std::cout << "Player win!\n";
+                } else if ( player.value < dealer.value ) {
+                    std::cout << "Dealer win!\n";
+                } else {
+                    std::cout << "Wash!\n";
+                }
+            } else {
+                std::cout << "Dealer bust!\n";
+            }
+        } else {
+            std::cout << "Player bust!\n";
+        }
+
+        // TODO resetHands();
         std::cout << "Your balance is: $" << bal << "\nEnter bet (0 to quit): ";
     }
 
