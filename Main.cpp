@@ -30,6 +30,11 @@ Card drawCard(Owner* owner) {
     return drawn;
 }
 
+void resetHand(Owner* owner) {
+    owner->value = 0;
+    owner->size = 0;
+}
+
 int main() {
     Owner dealer;
     dealer.id = 0;
@@ -43,7 +48,7 @@ int main() {
     std::cout << "Your balance is: $" << bal << "\nEnter bet (0 to quit): ";
     std::cin >> bet;
 
-    while (bet > 0) {
+    while (bet > 0 && bal > 0 && bal >= bet) {
         std::cout << "Your bet is: $" << bet << "\n";
         bal -= bet;
 
@@ -86,20 +91,25 @@ int main() {
             if ( dealer.value <= 21 ) {
                 if ( player.value > dealer.value ) {
                     std::cout << "Player win!\n";
+                    bal += (2 * bet);
                 } else if ( player.value < dealer.value ) {
                     std::cout << "Dealer win!\n";
                 } else {
                     std::cout << "Wash!\n";
+                    bal += bet;
                 }
             } else {
                 std::cout << "Dealer bust!\n";
+                bal += (2 * bet);
             }
         } else {
             std::cout << "Player bust!\n";
         }
 
-        // TODO resetHands();
+        resetHand(&dealer);
+        resetHand(&player);
         std::cout << "Your balance is: $" << bal << "\nEnter bet (0 to quit): ";
+        std::cin >> bet;
     }
 
     std::cout << "Thanks for playing!";
