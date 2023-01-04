@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include <iostream>
 
+// Initialize variables
+const char names[14] = { "A23456789TJQK" }; // to keep each as one char, ten = T
+const int values[13] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+
 class Card {
     public:
         char name;
@@ -15,10 +19,17 @@ class Owner {
         int value = 0;
 };
 
+Card drawCard (Owner owner) {
+    int draw = rand()%13;
+    Card drawn;
+    drawn.name = names[draw];
+    drawn.value = values[draw];
+    owner.hand[owner.size] = drawn;
+    owner.size++;
+    return drawn;
+}
+
 int main() {
-    // Initialize variables
-    const char names[14] = { "A23456789TJQK" }; // to keep each as one char, ten = T
-	const int values[13] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
     Owner dealer;
     dealer.id = 0;
     Owner player; 
@@ -35,29 +46,15 @@ int main() {
         std::cout << "Your bet is: $" << bet << "\n";
 
         // Begin game (draw cards)
-        // TODO make function for this, drawCards(dealer, 2)
+
         // Dealer
-        for (int i = 0; i < 2; i++) {
-            int draw = rand()%13;
-            Card drawn;
-            drawn.name = names[draw];
-            drawn.value = values[draw];
-            dealer.hand[dealer.size] = drawn;
-            dealer.size++;
-        }
-        std::cout << "Dealers card: " << dealer.hand[0].name << "\n";
+        std::cout << "Dealers card: " << drawCard(dealer).name << "\n";
+        drawCard(dealer);
+
         // Player
         std::cout << "Your cards: ";
-        for (int i = 0; i < 2; i++) {
-            int draw = rand()%13;
-            Card drawn;
-            drawn.name = names[draw];
-            drawn.value = values[draw];
-            player.hand[player.size] = drawn;
-            player.size++;
-        }
-        std::cout << player.hand[0].name << " & ";
-        std::cout << player.hand[1].name << "\n";
+        std::cout << drawCard(player).name << " & ";
+        std::cout << drawCard(player).name << "\n";
 
     }
 
