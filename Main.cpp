@@ -19,13 +19,14 @@ class Owner {
         int value = 0;
 };
 
-Card drawCard (Owner owner) {
+Card drawCard(Owner* owner) {
     int draw = rand()%13;
     Card drawn;
     drawn.name = names[draw];
     drawn.value = values[draw];
-    owner.hand[owner.size] = drawn;
-    owner.size++;
+    owner->hand[owner->size] = drawn;
+    owner->value += drawn.value;
+    owner->size++;
     return drawn;
 }
 
@@ -48,14 +49,34 @@ int main() {
         // Begin game (draw cards)
 
         // Dealer
-        std::cout << "Dealers card: " << drawCard(dealer).name << "\n";
-        drawCard(dealer);
+        std::cout << "Dealers card: " << drawCard(&dealer).name << "\n";
+        drawCard(&dealer);
 
         // Player
         std::cout << "Your cards: ";
-        std::cout << drawCard(player).name << " & ";
-        std::cout << drawCard(player).name << "\n";
+        std::cout << drawCard(&player).name << " & ";
+        std::cout << drawCard(&player).name << " = ";
+        std::cout << player.value << "\n";
 
+        // play begins
+        int choice;
+        std::cout << "0 for stand, 1 for hit: ";
+        std::cin >> choice;
+        
+        // until player stands, keep drawing cards
+        while ( choice == 1 ) {
+            choice = 0;
+            std::cout << "You hit: " << drawCard(&player).name << "\n";
+            std::cout << "Your hand value: " << player.value << "\n";
+
+            // don't let players draw after 21
+            if ( player.value < 21 ) {
+                std::cout << "0 for stand, 1 for hit: ";
+                std::cin >> choice;
+            }
+        }
+
+        std::cout << "Your balance is: $" << bal << "\nEnter bet (0 to quit): ";
     }
 
     std::cout << "Thanks for playing!";
