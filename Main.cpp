@@ -4,7 +4,7 @@
 
 // Initialize variables
 const char names[14] = { "A23456789TJQK" }; // to keep each as one char, ten = T
-const int values[13] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+const int values[13] = { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
 
 class Card {
     public:
@@ -36,6 +36,18 @@ void resetHand(Owner* owner) {
     owner->size = 0;
 }
 
+// converts Aces until hand value is 21 or less
+void convertAces(Owner* owner) {
+    int i = 0;
+    while (owner->value > 21 && i < owner->size){
+        if (owner->hand[i].value == 11) {
+            owner->hand[i].value = 1;
+            owner->value -= 10;
+        }
+        i++;
+    }
+}
+
 int main() {
     Owner dealer;
     dealer.id = 0;
@@ -64,6 +76,7 @@ int main() {
         std::cout << "Your cards: ";
         std::cout << drawCard(&player).name << " & ";
         std::cout << drawCard(&player).name << " = ";
+        convertAces(&player);
         std::cout << player.value << "\n";
 
         // play begins
@@ -75,6 +88,7 @@ int main() {
         while ( choice == 1 ) {
             choice = 0;
             std::cout << "You hit: " << drawCard(&player).name << "\n";
+            convertAces(&player);
             std::cout << "Your hand value: " << player.value << "\n";
 
             // don't let players draw after 21
@@ -88,6 +102,7 @@ int main() {
         if ( player.value <= 21 ) {
             while ( dealer.value < 17) {
                 drawCard(&dealer);
+                convertAces(&dealer);
             }
             std::cout << "Dealers value: " << dealer.value << "\n";
             if ( dealer.value <= 21 ) {
