@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <ctime>
 
 // Initialize variables
 const char names[14] = { "A23456789TJQK" }; // to keep each as one char, ten = T
@@ -42,6 +43,7 @@ int main() {
     player.id = 1;
     int bal = 1000;
     int bet = 0;
+    std::srand( std::time(0) );
 
     // Startup and welcome
     std::cout << "Hello welcome to text based blackjack.\n";
